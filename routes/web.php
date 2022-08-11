@@ -1,6 +1,12 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProspekController;
+use App\Http\Controllers\PelangganController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\BarangController;
+use App\Http\Controllers\PenjualanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,11 +24,22 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('admin.index');
 })->middleware(['auth'])->name('dashboard');
 
-Route::get('/coba' ,function () {
-    return view('admin.index');
-});
+Route::resource('prospek', ProspekController::class)->middleware(['auth','sales', 'penjualan', 'pimpinan']);
+
+Route::resource('pelanggan', PelangganController::class)->middleware(['auth','sales', 'penjualan', 'pimpinan']);
+
+Route::resource('barang', BarangController::class)->middleware(['auth', 'penjualan']);
+
+Route::resource('penjualan', PenjualanController::class)->middleware(['auth', 'pimpinan', 'penjualan']);
+
+// logout
+Route::get('/logout', function () {
+    Auth::guard('web')->logout();
+    return redirect('/');
+})->name('logout');
+
 
 require __DIR__.'/auth.php';
