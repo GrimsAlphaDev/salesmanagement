@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Penawaran;
 use App\Http\Requests\StorePenawaranRequest;
 use App\Http\Requests\UpdatePenawaranRequest;
+use Illuminate\Http\Request;
 
 class PenawaranController extends Controller
 {
@@ -15,7 +16,13 @@ class PenawaranController extends Controller
      */
     public function index()
     {
-        //
+        $penawaran = [];
+        $penawaran = Penawaran::orderBy('updated_at', 'desc');
+        $barang = \App\Models\Barang::all();
+        return view('penawaran.index' , [
+            'penawaran' => $penawaran->get(),
+            'barang' => $barang,
+        ]);
     }
 
     /**
@@ -36,7 +43,27 @@ class PenawaranController extends Controller
      */
     public function store(StorePenawaranRequest $request)
     {
-        //
+        // validate
+        $request->validate(
+            [
+                'kode_barang' => 'required',
+                'harga_penawaran' => 'required',
+                'stok_barang' => 'required',
+            ]
+        );
+
+        // store
+        $penawaran = new Penawaran();
+        $penawaran->id_barang = $request->kode_barang;
+        $penawaran->harga_penawaran = $request->harga_penawaran;
+        $penawaran->stok_barang = $request->stok_barang;
+        $penawaran->save();
+
+        if($penawaran) {
+            return redirect()->route('penawaran.index')->with('success', 'Data berhasil ditambahkan');
+        } else {
+            return redirect()->route('penawaran.index')->with('error', 'Data gagal ditambahkan');
+        }
     }
 
     /**
@@ -68,9 +95,29 @@ class PenawaranController extends Controller
      * @param  \App\Models\Penawaran  $penawaran
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePenawaranRequest $request, Penawaran $penawaran)
+    public function update(Request $request, Penawaran $penawaran)
     {
-        //
+        // validate
+        $request->validate(
+            [
+                'kode_barang' => 'required',
+                'harga_penawaran' => 'required',
+                'stok_barang' => 'required',
+            ]
+        );
+
+        // update
+        $penawaran = Penawaran::find($request->id)->update([
+            'id_barang' => $request->kode_barang,
+            'harga_penawaran' => $request->harga_penawaran,
+            'stok_barang' => $request->stok_barang,
+        ]);
+
+        if($penawaran) {
+            return redirect()->route('penawaran.index')->with('success', 'Data berhasil diubah');
+        } else {
+            return redirect()->route('penawaran.index')->with('error', 'Data gagal diubah');
+        }
     }
 
     /**
@@ -79,8 +126,14 @@ class PenawaranController extends Controller
      * @param  \App\Models\Penawaran  $penawaran
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Penawaran $penawaran)
+    public function destroy(Penawaran $penawaran, Request $request)
     {
-        //
+        // delete
+        $penawaran = Penawaran::find($request->id)->delete();
+        if($penawaran) {
+            return redirect()->route('penawaran.index')->with('success', 'Data berhasil dihapus');
+        } else {
+            return redirect()->route('penawaran.index')->with('error', 'Data gagal dihapus');
+        }
     }
 }

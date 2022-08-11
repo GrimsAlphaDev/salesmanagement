@@ -6,6 +6,8 @@ use App\Http\Controllers\ProspekController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\FakturController;
+use App\Http\Controllers\PenawaranController;
 use App\Http\Controllers\PenjualanController;
 
 /*
@@ -33,7 +35,12 @@ Route::resource('pelanggan', PelangganController::class)->middleware(['auth','sa
 
 Route::resource('barang', BarangController::class)->middleware(['auth', 'penjualan']);
 
-Route::resource('penjualan', PenjualanController::class)->middleware(['auth', 'pimpinan', 'penjualan']);
+Route::resource('penjualan', PenjualanController::class)->middleware(['auth', 'pimpinan', 'marketing']);
+
+Route::resource('penawaran', PenawaranController::class)->middleware(['auth', 'marketing']);
+
+Route::get('coba', 'PenjualanController@print')->middleware(['auth', 'pimpinan', 'marketing']);
+
 
 // logout
 Route::get('/logout', function () {

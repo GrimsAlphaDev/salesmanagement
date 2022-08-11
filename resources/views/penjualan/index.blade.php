@@ -63,12 +63,22 @@
                                                 <button type="submit" class="btn btn-danger btn-sm">
                                                     Hapus
                                                 </button>
-                                            </form>
+                                            </form> 
+                                            {{-- show penjualan --}}
+                                            <a href="{{ route('penjualan.show', $item->id) }}" class="btn btn-primary btn-sm">
+                                                Print Faktur
+                                            </a>
+                                            
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
+                        {{-- cetak laporan --}}
+                        <div class="text-center">
+                        <button onclick="window.print()" class="btn btn-primary">Print laporan</button>
+                    </div>
+
                     </div>
                 </div>
             </div>

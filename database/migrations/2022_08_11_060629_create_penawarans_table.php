@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('penawarans', function (Blueprint $table) {
             $table->id();
             // relation with barangs table
-            $table->bigInteger('kode_barang')->unsigned();
-            $table->foreign('kode_barang')->references('id')->on('barangs')
+            $table->bigInteger('id_barang')->unsigned();
+            $table->foreign('id_barang')->references('id')->on('barangs')
                 ->onDelete('cascade')->onUpdate('cascade');
             $table->bigInteger('harga_penawaran');
             $table->bigInteger('stok_barang');

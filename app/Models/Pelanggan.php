@@ -15,4 +15,6 @@ class Pelanggan extends Model
     {
         return $this->hasMany(Penjualan::class);
     }
+
+    
 }

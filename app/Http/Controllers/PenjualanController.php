@@ -8,6 +8,9 @@ use App\Http\Requests\UpdatePenjualanRequest;
 use App\Models\Barang;
 use App\Models\Pelanggan;
 use App\Models\User;
+use Illuminate\Http\Request;
+use PDF;
+
 
 class PenjualanController extends Controller
 {
@@ -88,7 +91,10 @@ class PenjualanController extends Controller
      */
     public function show(Penjualan $penjualan)
     {
-        //
+        return view('penjualan.faktur', [
+            'penjualan' => $penjualan,
+        ]);
+
     }
 
     /**
@@ -127,4 +133,6 @@ class PenjualanController extends Controller
         return redirect()->route('penjualan.index')->with('success', 'Data berhasil dihapus');
 
     }
+
+
 }
